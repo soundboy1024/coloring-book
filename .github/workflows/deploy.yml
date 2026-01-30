@@ -1,0 +1,19 @@
+name: Deploy to Surge
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install Surge
+        run: npm install --global surge
+      - name: Deploy to Surge
+        run: surge ./ casey-coloring-book-2026.surge.sh --token ${{ secrets.SURGE_TOKEN }}
