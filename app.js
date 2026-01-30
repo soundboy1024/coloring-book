@@ -6,7 +6,11 @@ const DATA_VERSION = 'v5_unicorns'; // Bump version
 const PALETTE = [
     '#FF3B30', '#FF9500', '#FFCC00', '#4CD964',
     '#5AC8FA', '#007AFF', '#5856D6', '#FF2D55',
-    '#A2845E', '#8E8E93', '#000000', '#FFFFFF'
+    '#A2845E', '#8E8E93', '#000000', '#FFFFFF',
+    // New Colors
+    '#FF69B4', // Hot Pink
+    // Pastels
+    '#FFB3BA', '#FFDFBA', '#FFFFBA', '#BAFFC9', '#BAE1FF', '#E2BAFF'
 ];
 const TOLERANCE = 50; // Color matching tolerance
 
@@ -75,6 +79,7 @@ function selectColor(color, btnElement) {
 function updateToolUI() {
     document.getElementById('tool-brush').classList.toggle('active', state.currentTool === 'brush');
     document.getElementById('tool-fill').classList.toggle('active', state.currentTool === 'fill');
+    document.getElementById('tool-eraser').classList.toggle('active', state.currentTool === 'eraser');
 }
 
 function setupCanvas() {
@@ -202,6 +207,7 @@ function updatePageIndicator() {
 // Tools
 const TOOL_BRUSH = 'brush';
 const TOOL_FILL = 'fill';
+const TOOL_ERASER = 'eraser';
 
 function attachEventListeners() {
     // Navigation
@@ -213,6 +219,7 @@ function attachEventListeners() {
 
     document.getElementById('tool-brush').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_BRUSH); });
     document.getElementById('tool-fill').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_FILL); });
+    document.getElementById('tool-eraser').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_ERASER); });
 
     // Canvas Pointer Events
     canvas.addEventListener('pointerdown', handlePointerDown);
@@ -224,6 +231,7 @@ function setTool(tool) {
     state.currentTool = tool;
     document.getElementById('tool-brush').classList.toggle('active', tool === TOOL_BRUSH);
     document.getElementById('tool-fill').classList.toggle('active', tool === TOOL_FILL);
+    document.getElementById('tool-eraser').classList.toggle('active', tool === TOOL_ERASER);
 }
 
 // Drawing State
@@ -278,7 +286,15 @@ function getCoords(e) {
 
 function drawLine(x1, y1, x2, y2) {
     ctx.beginPath();
-    ctx.strokeStyle = state.currentColor;
+    
+    if (state.currentTool === TOOL_ERASER) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.strokeStyle = 'rgba(0,0,0,1)'; // Color doesn't matter for erase
+    } else {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = state.currentColor;
+    }
+
     ctx.lineWidth = 20; // Thick brush for kids
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -289,10 +305,19 @@ function drawLine(x1, y1, x2, y2) {
 }
 
 function drawCircle(x, y) {
+    if (state.currentTool === TOOL_ERASER) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,1)';
+    } else {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = state.currentColor;
+    }
+    
     ctx.beginPath();
-    ctx.fillStyle = state.currentColor;
     ctx.arc(x, y, 10, 0, Math.PI * 2);
     ctx.fill();
+    // Reset comp op for safety, though drawLine handles it too
+    ctx.globalCompositeOperation = 'source-over'; 
 }
 
 function changePage(delta) {
