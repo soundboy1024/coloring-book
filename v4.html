@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <title>Kids Coloring Book</title>
+    <link rel="stylesheet" href="style.css?v=15">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Banner -->
+        <div id="app-header">
+            <img src="images/unicorn.png" class="header-icon left" alt="Unicorn">
+            <h1>Emma's Coloring Book</h1>
+            <img src="images/unicorn.png" class="header-icon right" alt="Unicorn">
+        </div>
+
+        <!-- Main Content Wrapper to handle layout below header -->
+        <div id="main-content">
+            <!-- Sidebar (Left) -->
+            <div id="sidebar">
+                <!-- Section: Nav -->
+                <div class="sidebar-section">
+                    <button id="tool-gallery" class="nav-btn" title="Open Library">📁</button>
+                    <div style="display:flex; gap:5px; justify-content:center; width:100%;">
+                        <button id="prev-btn" class="nav-btn">◀</button>
+                        <button id="next-btn" class="nav-btn">▶</button>
+                    </div>
+                    <span id="page-indicator" style="font-weight:bold; font-size:14px; color:#555;">1/10</span>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Tools -->
+                <div class="sidebar-section">
+                    <div id="tool-brush" class="control-btn" title="Brush">✏️</div>
+                    <div id="tool-fill" class="control-btn active" title="Smart Fill">🪣</div>
+                    <div id="tool-eraser" class="control-btn" title="Eraser">🧽</div>
+                    <div id="tool-rainbow" class="control-btn" title="Rainbow Brush">🌈</div>
+                    <div id="tool-text" class="control-btn" title="Text Stamp">🔤</div>
+                </div>
+
+                <!-- Settings (Brush Size / Text Char) -->
+                <div id="settings-container" class="sidebar-section"
+                    style="padding: 5px; background: rgba(0,0,0,0.03); border-radius: 10px; width: 90%;">
+                    <div style="display:flex; align-items:center; gap:5px; width:100%; justify-content: space-between;">
+                        <span style="font-size:12px; font-weight:bold; color:#555;">Size</span>
+                        <input type="range" id="size-slider" min="10" max="100" value="30" style="width:50px;">
+                    </div>
+                    <div
+                        style="display:flex; align-items:center; gap:5px; width:100%; justify-content: space-between; margin-top:5px;">
+                        <span style="font-size:12px; font-weight:bold; color:#555;">Text</span>
+                        <input type="text" id="char-input" maxlength="1" value="A"
+                            style="width:30px; text-align:center; font-weight:bold; border:1px solid #ccc; border-radius:5px; height:24px;">
+                    </div>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Palette -->
+                <div id="color-palette" class="sidebar-palette">
+                    <!-- Colors injected via JS -->
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Actions -->
+                <div class="sidebar-section">
+                    <div id="finish-btn" class="control-btn" title="Celebrate!">🎉</div>
+                    <div id="clear-btn" class="control-btn" title="Clear Canvas"
+                        style="width:100%; border-radius:10px; font-size:12px;">Clear</div>
+                </div>
+            </div>
+
+            <!-- Main Drawing Area -->
+            <div id="main-area">
+                <div id="canvas-wrapper">
+                    <canvas id="drawing-layer"></canvas>
+                    <div id="line-art-container">
+                        <!-- SVG injected here -->
+                        <img id="line-art-layer" src="" alt="Coloring Outline">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <canvas id="confetti-layer"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:100;"></canvas>
+
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📚 Library</h2>
+                <button id="close-gallery" class="icon-btn">✖</button>
+            </div>
+            <div id="gallery-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="assets.js"></script>
+    <script src="extensions.js"></script>
+    <script src="banner.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then((reg) => console.log('SW registered:', reg))
+                    .catch((err) => console.log('SW failed:', err));
+            });
+        }
+    </script>
+</body>
+
+</html>
