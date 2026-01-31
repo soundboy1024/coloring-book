@@ -80,6 +80,7 @@ function updateToolUI() {
     document.getElementById('tool-brush').classList.toggle('active', state.currentTool === 'brush');
     document.getElementById('tool-fill').classList.toggle('active', state.currentTool === 'fill');
     document.getElementById('tool-eraser').classList.toggle('active', state.currentTool === 'eraser');
+    document.getElementById('tool-rainbow').classList.toggle('active', state.currentTool === 'rainbow');
 }
 
 function setupCanvas() {
