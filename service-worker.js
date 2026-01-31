@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v10-library';
+const CACHE_NAME = 'coloring-book-v11-gallery-move';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
