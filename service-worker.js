@@ -1,13 +1,17 @@
-const CACHE_NAME = 'coloring-book-v1';
+const CACHE_NAME = 'coloring-book-v2-unicorns';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './style.css',
     './app.js',
     './assets.js',
+    './extensions.js',
     './banner.js',
     './manifest.json',
     './images/unicorn.png',
+    './images/unicorn_jump.png',
+    './images/unicorn_icecream.png',
+    './images/unicorn_sleep.png',
     './images/gacha_bear.png',
     './images/gacha_boy.png',
     './images/gacha_cat.png',
