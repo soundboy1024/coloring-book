@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v11-gallery-move';
+const CACHE_NAME = 'coloring-book-v12-fix-palette';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
