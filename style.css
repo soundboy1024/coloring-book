@@ -101,12 +101,54 @@ html {
 /* Main Content Wrapper */
 #main-content {
   display: flex;
-  flex-direction: column;
-  /* Vertical stack: Canvas Area on top, Toolbar on bottom */
+  flex-direction: row;
+  /* Side by side: Sidebar | Canvas */
   flex: 1;
   overflow: hidden;
   position: relative;
   width: 100%;
+}
+
+#sidebar {
+  width: 100px;
+  /* Fixed width for menu */
+  min-width: 100px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  align-items: center;
+  padding: 15px 5px;
+  gap: 15px;
+  z-index: 20;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.sidebar-palette {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px;
+}
+
+.sidebar-divider {
+  width: 80%;
+  height: 2px;
+  background-color: #eee;
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 
 #main-area {
@@ -123,8 +165,9 @@ html {
   position: relative;
   width: 95%;
   height: 95%;
-  max-width: 100vh;
-  max-height: 100vh;
+  max-width: 95vw;
+  /* Use viewport width constraint too */
+  max-height: 95vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,147 +175,72 @@ html {
   /* Shadow for the drawing page */
 }
 
-canvas,
-#line-art-layer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  touch-action: none;
-}
-
-#drawing-layer {
-  z-index: 1;
-  cursor: crosshair;
-}
-
-#line-art-layer {
-  z-index: 2;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-}
-
-#toolbar {
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.85);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 20px;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
-  /* Shadow pointing up */
-  z-index: 10;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  box-sizing: border-box;
-  flex-shrink: 0;
-  /* Prevent shrinking */
-}
-
-/* Scrollbar styling for horizontal palette */
-#color-palette::-webkit-scrollbar {
-  height: 6px;
-}
-
-#color-palette::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-}
-
-.control-btn {
+/* Updated Button Styles for Sidebar */
+.control-btn,
+.nav-btn {
   width: 50px;
   height: 50px;
-  flex-shrink: 0;
-  /* margin-bottom handled by container gap */
-  border-radius: 50%;
-  border: 3px solid #fff;
+  border-radius: 12px;
+  /* Soft squares match sidebar better than circles? */
+  border: 2px solid white;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-}
-
-.control-btn:active {
-  transform: scale(0.9);
-}
-
-.control-btn.active {
-  transform: scale(1.1);
-  border-color: var(--primary-color);
-  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.5);
-  z-index: 2;
-  background-color: #fff !important;
-  /* Ensure bg is white unless tool overrides */
-}
-
-/* Tool specific active states */
-#tool-brush.active,
-#tool-fill.active,
-#tool-eraser.active,
-#tool-rainbow.active,
-#tool-text.active {
-  background-color: var(--primary-color) !important;
-  color: white !important;
-  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4);
-}
-
-#tool-rainbow.active {
-  background: linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff) !important;
-  border-color: transparent;
-}
-
-#finish-btn {
-  background: #E0E0E0;
-  color: #333;
-  font-size: 24px;
-  margin-top: auto;
-  /* Push to bottom near clear */
-  margin-bottom: 10px;
-}
-
-#tool-container {
-  display: flex;
-  gap: 15px;
-  flex-direction: row;
-  /* Horizontal */
-  margin-bottom: 0;
-  /* Remove bottom margin */
-  padding-bottom: 0;
-  border-bottom: none;
-  border-right: 2px dashed #ddd;
-  /* Separator */
-  padding-right: 20px;
-  margin-right: 10px;
-  align-items: center;
-}
-
-#tool-brush,
-#tool-fill,
-#tool-eraser,
-#tool-rainbow,
-#tool-text,
-#tool-gallery {
-  color: #333;
-  font-size: 24px;
-}
-
-#clear-btn {
-  background-color: #FF3B30;
-  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 1px;
-  margin-top: auto;
-  /* Push to bottom */
-  border-radius: 15px;
-  width: 80%;
-  height: 50px;
+  background: white;
+  font-size: 24px;
+  transition: all 0.2s;
+  flex-shrink: 0;
 }
+
+.nav-btn {
+  border-radius: 12px;
+  font-size: 20px;
+}
+
+.control-btn:active,
+.nav-btn:active {
+  transform: scale(0.95);
+}
+
+.control-btn.active {
+  transform: scale(1.05);
+  border-color: var(--primary-color);
+  background-color: #fff8e1;
+  box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3);
+  z-index: 2;
+}
+
+/* Specific button Tweaks */
+#clear-btn {
+  background-color: #FF3B30;
+  color: white;
+  font-weight: bold;
+  height: 40px;
+  width: 80% !important;
+  border-radius: 8px;
+}
+
+/* Color Circle Override */
+.color-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.color-btn.active {
+  transform: scale(1.2);
+  border-color: #333;
+}
+
+/* Scrollbar hidden for cleaner look */
+#sidebar::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
 
 #nav-controls {
   position: absolute;

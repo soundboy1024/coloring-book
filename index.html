@@ -24,13 +24,44 @@
 
         <!-- Main Content Wrapper to handle layout below header -->
         <div id="main-content">
-            <!-- Navigation / Top Left Controls -->
-            <div id="nav-controls">
-                <button id="tool-gallery" class="nav-btn" title="Open Library">📁</button>
-                <button id="prev-btn" class="nav-btn">◀</button>
-                <span id="page-indicator" class="nav-btn"
-                    style="border:none; background:none; font-weight:bold;">1/10</span>
-                <button id="next-btn" class="nav-btn">▶</button>
+            <!-- Sidebar (Left) -->
+            <div id="sidebar">
+                <!-- Section: Nav -->
+                <div class="sidebar-section">
+                    <button id="tool-gallery" class="nav-btn" title="Open Library">📁</button>
+                    <div style="display:flex; gap:5px; justify-content:center; width:100%;">
+                        <button id="prev-btn" class="nav-btn">◀</button>
+                        <button id="next-btn" class="nav-btn">▶</button>
+                    </div>
+                    <span id="page-indicator" style="font-weight:bold; font-size:14px; color:#555;">1/10</span>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Tools -->
+                <div class="sidebar-section">
+                    <div id="tool-brush" class="control-btn" title="Brush">✏️</div>
+                    <div id="tool-fill" class="control-btn active" title="Smart Fill">🪣</div>
+                    <div id="tool-eraser" class="control-btn" title="Eraser">🧽</div>
+                    <div id="tool-rainbow" class="control-btn" title="Rainbow Brush">🌈</div>
+                    <div id="tool-text" class="control-btn" title="Text Stamp">🔤</div>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Palette -->
+                <div id="color-palette" class="sidebar-palette">
+                    <!-- Colors injected via JS -->
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Actions -->
+                <div class="sidebar-section">
+                    <div id="finish-btn" class="control-btn" title="Celebrate!">🎉</div>
+                    <div id="clear-btn" class="control-btn" title="Clear Canvas"
+                        style="width:100%; border-radius:10px; font-size:12px;">Clear</div>
+                </div>
             </div>
 
             <!-- Main Drawing Area -->
@@ -40,46 +71,6 @@
                     <div id="line-art-container">
                         <!-- SVG injected here -->
                         <img id="line-art-layer" src="" alt="Coloring Outline">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Toolbar (Bottom) -->
-            <div id="toolbar">
-                <div id="tool-row"
-                    style="display:flex; gap:20px; align-items:center; width:100%; justify-content:space-between; overflow-x:auto;">
-                    <!-- Tools -->
-                    <div id="tool-container" style="display:flex; gap:10px;">
-                        <div id="tool-brush" class="control-btn" title="Brush">✏️</div>
-                        <div id="tool-fill" class="control-btn active" title="Smart Fill">🪣</div>
-                        <div id="tool-eraser" class="control-btn" title="Eraser">🧽</div>
-                        <div id="tool-rainbow" class="control-btn" title="Rainbow Brush">🌈</div>
-                        <div id="tool-text" class="control-btn" title="Text Stamp">🔤</div>
-                    </div>
-
-                    <!-- Color Palette -->
-                    <div id="color-palette"
-                        style="display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; padding:5px;">
-                        <!-- Colors injected via JS -->
-                    </div>
-
-                    <!-- Settings & Actions -->
-                    <div style="display:flex; gap:10px; align-items:center;">
-                        <div id="settings-container"
-                            style="display:flex; gap:10px; background:rgba(255,255,255,0.5); padding:5px; border-radius:10px;">
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <span style="font-size:12px;">Char:</span>
-                                <input type="text" id="char-input" maxlength="1" value="A"
-                                    style="width:30px; text-align:center; font-weight:bold;">
-                            </div>
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <span style="font-size:12px;">Size:</span>
-                                <input type="range" id="size-slider" min="10" max="100" value="30" style="width:80px;">
-                            </div>
-                        </div>
-                        <div id="finish-btn" class="control-btn" title="Celebrate!">🎉</div>
-                        <div id="clear-btn" class="control-btn" title="Clear Canvas"
-                            style="width:auto; padding:0 15px;">Clear</div>
                     </div>
                 </div>
             </div>
