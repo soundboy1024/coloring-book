@@ -47,12 +47,14 @@ const pageNr = document.getElementById('page-indicator');
 const clearBtn = document.getElementById('clear-btn');
 
 // Initialization
+// Initialization
 function init() {
     setupPalette();
     setupCanvas();
     loadState();
     updateToolUI();
     renderPage();
+    setupGallery(); // Build the gallery once
     attachEventListeners();
 }
 
@@ -99,9 +101,13 @@ function renderPage() {
     const asset = ASSETS[state.currentIndex];
 
     // Handle Image Assets
-    if (asset.type === 'image') {
+    if (asset.type === 'blank') {
+        lineArtImg.style.display = 'none'; // Hide outline for free draw
+    } else if (asset.type === 'image') {
+        lineArtImg.style.display = 'block';
         lineArtImg.src = asset.src;
     } else {
+        lineArtImg.style.display = 'block';
         // Fallback for Inline SVG (if we keep any)
         const blob = new Blob([asset.svg], { type: 'image/svg+xml' });
         const url = URL.createObjectURL(blob);
@@ -229,6 +235,8 @@ function attachEventListeners() {
     document.getElementById('tool-eraser').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_ERASER); });
     document.getElementById('tool-rainbow').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_RAINBOW); });
     document.getElementById('tool-text').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_TEXT); });
+    document.getElementById('tool-gallery').addEventListener('pointerdown', (e) => { e.preventDefault(); openGallery(); });
+    document.getElementById('close-gallery').addEventListener('pointerdown', (e) => { e.preventDefault(); closeGallery(); });
     document.getElementById('finish-btn').addEventListener('pointerdown', (e) => { e.preventDefault(); fireConfetti(); });
 
     // Settings
@@ -554,6 +562,78 @@ function fireConfetti() {
         }
     }
     animate();
+}
+
+// Gallery Logic
+function openGallery() {
+    document.getElementById('gallery-modal').classList.remove('hidden');
+}
+
+function closeGallery() {
+    document.getElementById('gallery-modal').classList.add('hidden');
+}
+
+function setupGallery() {
+    const grid = document.getElementById('gallery-grid');
+    grid.innerHTML = '';
+
+    // Group by Category
+    const categories = {};
+    ASSETS.forEach((asset, index) => {
+        const cat = asset.category || 'Misc';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push({ asset, index });
+    });
+
+    // Render Groups
+    Object.keys(categories).forEach(cat => {
+        const section = document.createElement('div');
+        section.className = 'gallery-section';
+
+        const title = document.createElement('div');
+        title.className = 'gallery-title';
+        title.textContent = cat;
+        section.appendChild(title);
+
+        const itemsDiv = document.createElement('div');
+        itemsDiv.className = 'gallery-items';
+
+        categories[cat].forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'gallery-item';
+            if (item.index === state.currentIndex) el.classList.add('active');
+
+            // Thumb
+            const img = document.createElement('img');
+            img.className = 'gallery-thumb';
+            // Use src or a placeholder for blank
+            img.src = item.asset.type === 'blank' ? 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="white" stroke="%23ddd" stroke-width="2"/><text x="50" y="50" text-anchor="middle" dy=".3em" fill="%23ccc">Blank</text></svg>' : item.asset.src;
+
+            const label = document.createElement('div');
+            label.className = 'gallery-label';
+            label.textContent = item.asset.name;
+
+            el.appendChild(img);
+            el.appendChild(label);
+
+            el.addEventListener('pointerdown', (e) => {
+                // Select and close
+                state.currentIndex = item.index;
+                renderPage();
+                updatePageIndicator();
+                closeGallery();
+
+                // Update active state visual in menu for next time
+                document.querySelectorAll('.gallery-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            });
+
+            itemsDiv.appendChild(el);
+        });
+
+        section.appendChild(itemsDiv);
+        grid.appendChild(section);
+    });
 }
 
 // Start
