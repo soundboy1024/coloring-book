@@ -167,9 +167,15 @@ canvas,
 }
 
 .control-btn {
+<<<<<<< HEAD
   width: 50px;
   height: 50px;
   /* margin-bottom handled by container gap */
+=======
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+>>>>>>> origin/main
   border-radius: 50%;
   border: 3px solid #fff;
   cursor: pointer;
@@ -185,6 +191,7 @@ canvas,
 .control-btn.active {
   transform: scale(1.1);
   border-color: var(--primary-color);
+<<<<<<< HEAD
   box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.5);
   z-index: 2;
   background-color: #fff !important;
@@ -214,6 +221,12 @@ canvas,
   /* Push to bottom near clear */
   margin-bottom: 10px;
 }
+=======
+  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.3);
+  z-index: 2;
+}
+
+>>>>>>> origin/main
 
 
 #tool-container {
@@ -228,6 +241,7 @@ canvas,
 }
 
 #tool-brush,
+<<<<<<< HEAD
 #tool-fill,
 #tool-eraser {
   color: #333;
@@ -236,6 +250,18 @@ canvas,
 
 /* Removed inline style override in JS favor of CSS class above, but JS still toggles classes */
 /* Cleaning up old specific overrides if any */
+=======
+#tool-fill {
+  color: #333;
+  font-size: 28px;
+}
+
+#tool-brush.active,
+#tool-fill.active {
+  background-color: var(--primary-color) !important;
+  color: white;
+}
+>>>>>>> origin/main
 
 #clear-btn {
   background-color: #FF3B30;
