@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v2-unicorns';
+const CACHE_NAME = 'coloring-book-v3-unicorns';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
