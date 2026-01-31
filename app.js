@@ -55,6 +55,28 @@ function init() {
     updateToolUI();
     renderPage();
     setupGallery(); // Build the gallery once
+    // --- iOS Gesture Blocking ---
+    document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+    document.addEventListener('dblclick', function (e) { e.preventDefault(); }, { passive: false });
+
+    // Prevent double-tap zoom on links/buttons
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (e) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // Prevent long-press context menu
+    window.oncontextmenu = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    };
+    // ----------------------------
+
     attachEventListeners();
 }
 
