@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v20-v4-release';
+const CACHE_NAME = 'coloring-book-v21-export';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

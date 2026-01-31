@@ -262,7 +262,17 @@ function attachEventListeners() {
     document.getElementById('tool-text').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_TEXT); });
     document.getElementById('tool-gallery').addEventListener('pointerdown', (e) => { e.preventDefault(); openGallery(); });
     document.getElementById('close-gallery').addEventListener('pointerdown', (e) => { e.preventDefault(); closeGallery(); });
-    document.getElementById('finish-btn').addEventListener('pointerdown', (e) => { e.preventDefault(); fireConfetti(); });
+    document.getElementById('finish-btn').addEventListener('click', () => {
+        triggerConfetti();
+    });
+
+    document.getElementById('export-btn').addEventListener('click', exportImage);
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+        if (confirm('Clear your drawing?')) {
+            clearCanvas();
+        }
+    });
 
     // Settings
     const charInput = document.getElementById('char-input');
