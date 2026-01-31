@@ -266,7 +266,10 @@ function attachEventListeners() {
         triggerConfetti();
     });
 
-    document.getElementById('export-btn').addEventListener('click', exportImage);
+    document.getElementById('export-btn').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        exportImage();
+    });
 
     document.getElementById('clear-btn').addEventListener('click', () => {
         if (confirm('Clear your drawing?')) {

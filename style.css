@@ -43,6 +43,15 @@ button,
   touch-action: manipulation;
 }
 
+/* Fix Scrolling for Sidebar and Gallery */
+#sidebar,
+#gallery-grid,
+.modal-content {
+  touch-action: pan-y !important;
+  overscroll-behavior-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
 img {
   pointer-events: none;
   /* Allow touches to pass through images */
