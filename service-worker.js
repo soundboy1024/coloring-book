@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v14-fix-canvas';
+const CACHE_NAME = 'coloring-book-v15-ipad-fix';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

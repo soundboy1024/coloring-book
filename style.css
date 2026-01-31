@@ -167,7 +167,8 @@ html {
   height: 95%;
   max-width: 95vw;
   /* Use viewport width constraint too */
-  max-height: 95vh;
+  max-height: 95dvh;
+  /* Dynamic viewport height for iOS */
   display: flex;
   justify-content: center;
   align-items: center;
