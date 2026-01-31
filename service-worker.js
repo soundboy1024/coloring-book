@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v13-sidebar';
+const CACHE_NAME = 'coloring-book-v14-fix-canvas';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

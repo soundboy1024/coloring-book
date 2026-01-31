@@ -175,6 +175,29 @@ html {
   /* Shadow for the drawing page */
 }
 
+canvas,
+#line-art-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  touch-action: none;
+}
+
+#drawing-layer {
+  z-index: 1;
+  cursor: crosshair;
+}
+
+#line-art-layer {
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
 /* Updated Button Styles for Sidebar */
 .control-btn,
 .nav-btn {
