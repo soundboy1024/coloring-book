@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v18-v3-release';
+const CACHE_NAME = 'coloring-book-v19-nuclear-touch';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

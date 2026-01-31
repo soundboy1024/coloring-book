@@ -18,17 +18,29 @@ html {
   overflow: hidden;
   background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
   font-family: 'Outfit', 'Segoe UI', sans-serif;
-  touch-action: none;
-  user-select: none;
-  overscroll-behavior: none;
   /* Prevent bounce */
   -webkit-overflow-scrolling: touch;
+}
+
+/* GLOBAL BLOCK for iOS interactions */
+* {
   -webkit-user-select: none;
-  /* Safari */
   -webkit-touch-callout: none;
   /* Disable long-press menu */
   -webkit-tap-highlight-color: transparent;
-  /* No blue tap box */
+  touch-action: none;
+  /* Disable Browser handling of gestures */
+  user-select: none;
+  overscroll-behavior: none;
+}
+
+/* Allow interaction only on sliders and inputs */
+input,
+button,
+.control-btn,
+.nav-btn {
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 img {

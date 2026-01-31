@@ -59,15 +59,18 @@ function init() {
     document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
     document.addEventListener('dblclick', function (e) { e.preventDefault(); }, { passive: false });
 
-    // Prevent double-tap zoom on links/buttons
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function (e) {
-        const now = (new Date()).getTime();
-        if (now - lastTouchEnd <= 300) {
-            e.preventDefault();
+    // Prevent double-tap zoom specifically on touchstart
+    let lastTouchStart = 0;
+    document.addEventListener('touchstart', function (e) {
+        if (e.touches.length > 1) {
+            e.preventDefault(); // Block multi-touch pinch
         }
-        lastTouchEnd = now;
-    }, false);
+        const now = (new Date()).getTime();
+        if (now - lastTouchStart <= 300) {
+            e.preventDefault(); // Block double-tap
+        }
+        lastTouchStart = now;
+    }, { passive: false });
 
     // Prevent long-press context menu
     window.oncontextmenu = function (event) {
