@@ -208,6 +208,7 @@ function updatePageIndicator() {
 const TOOL_BRUSH = 'brush';
 const TOOL_FILL = 'fill';
 const TOOL_ERASER = 'eraser';
+const TOOL_RAINBOW = 'rainbow';
 
 function attachEventListeners() {
     // Navigation
@@ -220,6 +221,8 @@ function attachEventListeners() {
     document.getElementById('tool-brush').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_BRUSH); });
     document.getElementById('tool-fill').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_FILL); });
     document.getElementById('tool-eraser').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_ERASER); });
+    document.getElementById('tool-rainbow').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_RAINBOW); });
+    document.getElementById('finish-btn').addEventListener('pointerdown', (e) => { e.preventDefault(); fireConfetti(); });
 
     // Canvas Pointer Events
     canvas.addEventListener('pointerdown', handlePointerDown);
@@ -232,6 +235,7 @@ function setTool(tool) {
     document.getElementById('tool-brush').classList.toggle('active', tool === TOOL_BRUSH);
     document.getElementById('tool-fill').classList.toggle('active', tool === TOOL_FILL);
     document.getElementById('tool-eraser').classList.toggle('active', tool === TOOL_ERASER);
+    document.getElementById('tool-rainbow').classList.toggle('active', tool === TOOL_RAINBOW);
 }
 
 // Drawing State
@@ -286,10 +290,14 @@ function getCoords(e) {
 
 function drawLine(x1, y1, x2, y2) {
     ctx.beginPath();
-    
+
     if (state.currentTool === TOOL_ERASER) {
         ctx.globalCompositeOperation = 'destination-out';
         ctx.strokeStyle = 'rgba(0,0,0,1)'; // Color doesn't matter for erase
+    } else if (state.currentTool === TOOL_RAINBOW) {
+        ctx.globalCompositeOperation = 'source-over';
+        const hue = (Date.now() / 5) % 360;
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
     } else {
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle = state.currentColor;
@@ -312,12 +320,12 @@ function drawCircle(x, y) {
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = state.currentColor;
     }
-    
+
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, Math.PI * 2);
     ctx.fill();
     // Reset comp op for safety, though drawLine handles it too
-    ctx.globalCompositeOperation = 'source-over'; 
+    ctx.globalCompositeOperation = 'source-over';
 }
 
 function changePage(delta) {
@@ -438,6 +446,59 @@ function colorsMatch(r1, g1, b1, a1, r2, g2, b2, a2) {
     // Relaxed tolerance 
     const RELAXED_TOLERANCE = 80;
     return dr < RELAXED_TOLERANCE && dg < RELAXED_TOLERANCE && db < RELAXED_TOLERANCE;
+}
+
+// Confetti Effect
+function fireConfetti() {
+    const canvas = document.getElementById('confetti-layer');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const colors = ['#FF9500', '#FF3B30', '#4CD964', '#5AC8FA', '#007AFF', '#5856D6', '#FF2D55'];
+
+    for (let i = 0; i < 150; i++) {
+        particles.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            xv: (Math.random() - 0.5) * 20,
+            yv: (Math.random() - 0.5) * 20 - 10,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            size: Math.random() * 10 + 5,
+            rotation: Math.random() * 360
+        });
+    }
+
+    let frame = 0;
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        particles.forEach(p => {
+            p.x += p.xv;
+            p.y += p.yv;
+            p.yv += 0.5; // Gravity
+            p.rotation += 5;
+
+            if (p.y < canvas.height + 50) {
+                active = true;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+            }
+        });
+
+        if (active && frame < 300) {
+            frame++;
+            requestAnimationFrame(animate);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    animate();
 }
 
 // Start

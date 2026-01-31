@@ -185,10 +185,35 @@ canvas,
 .control-btn.active {
   transform: scale(1.1);
   border-color: var(--primary-color);
-  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.5);
   z-index: 2;
+  background-color: #fff !important;
+  /* Ensure bg is white unless tool overrides */
 }
 
+/* Tool specific active states */
+#tool-brush.active,
+#tool-fill.active,
+#tool-eraser.active,
+#tool-rainbow.active {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4);
+}
+
+#tool-rainbow.active {
+  background: linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff) !important;
+  border-color: transparent;
+}
+
+#finish-btn {
+  background: #E0E0E0;
+  color: #333;
+  font-size: 24px;
+  margin-top: auto;
+  /* Push to bottom near clear */
+  margin-bottom: 10px;
+}
 
 
 #tool-container {
@@ -209,12 +234,8 @@ canvas,
   font-size: 24px;
 }
 
-#tool-brush.active,
-#tool-fill.active,
-#tool-eraser.active {
-  background-color: var(--primary-color) !important;
-  color: white;
-}
+/* Removed inline style override in JS favor of CSS class above, but JS still toggles classes */
+/* Cleaning up old specific overrides if any */
 
 #clear-btn {
   background-color: #FF3B30;
