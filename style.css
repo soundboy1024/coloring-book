@@ -23,6 +23,20 @@ html {
   overscroll-behavior: none;
   /* Prevent bounce */
   -webkit-overflow-scrolling: touch;
+  -webkit-user-select: none;
+  /* Safari */
+  -webkit-touch-callout: none;
+  /* Disable long-press menu */
+  -webkit-tap-highlight-color: transparent;
+  /* No blue tap box */
+}
+
+img {
+  pointer-events: none;
+  /* Allow touches to pass through images */
+  -webkit-user-drag: none;
+  /* Disable drag */
+  user-select: none;
 }
 
 #app-container {
