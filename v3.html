@@ -60,65 +60,66 @@
                         <input type="text" id="char-input" maxlength="1" value="A"
                             style="width:30px; text-align:center; font-weight:bold; border:1px solid #ccc; border-radius:5px; height:24px;">
                     </div>
-
-                    <div class="sidebar-divider"></div>
-
-                    <!-- Section: Palette -->
-                    <div id="color-palette" class="sidebar-palette">
-                        <!-- Colors injected via JS -->
-                    </div>
-
-                    <div class="sidebar-divider"></div>
-
-                    <!-- Section: Actions -->
-                    <div class="sidebar-section">
-                        <div id="finish-btn" class="control-btn" title="Celebrate!">🎉</div>
-                        <div id="clear-btn" class="control-btn" title="Clear Canvas"
-                            style="width:100%; border-radius:10px; font-size:12px;">Clear</div>
-                    </div>
                 </div>
 
-                <!-- Main Drawing Area -->
-                <div id="main-area">
-                    <div id="canvas-wrapper">
-                        <canvas id="drawing-layer"></canvas>
-                        <div id="line-art-container">
-                            <!-- SVG injected here -->
-                            <img id="line-art-layer" src="" alt="Coloring Outline">
-                        </div>
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Palette -->
+                <div id="color-palette" class="sidebar-palette">
+                    <!-- Colors injected via JS -->
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- Section: Actions -->
+                <div class="sidebar-section">
+                    <div id="finish-btn" class="control-btn" title="Celebrate!">🎉</div>
+                    <div id="clear-btn" class="control-btn" title="Clear Canvas"
+                        style="width:100%; border-radius:10px; font-size:12px;">Clear</div>
+                </div>
+            </div>
+
+            <!-- Main Drawing Area -->
+            <div id="main-area">
+                <div id="canvas-wrapper">
+                    <canvas id="drawing-layer"></canvas>
+                    <div id="line-art-container">
+                        <!-- SVG injected here -->
+                        <img id="line-art-layer" src="" alt="Coloring Outline">
                     </div>
                 </div>
             </div>
         </div>
-        <canvas id="confetti-layer"
-            style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:100;"></canvas>
+    </div>
+    <canvas id="confetti-layer"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:100;"></canvas>
 
-        <!-- Gallery Modal -->
-        <div id="gallery-modal" class="modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>📚 Library</h2>
-                    <button id="close-gallery" class="icon-btn">✖</button>
-                </div>
-                <div id="gallery-grid">
-                    <!-- Injected via JS -->
-                </div>
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📚 Library</h2>
+                <button id="close-gallery" class="icon-btn">✖</button>
+            </div>
+            <div id="gallery-grid">
+                <!-- Injected via JS -->
             </div>
         </div>
+    </div>
 
-        <script src="assets.js"></script>
-        <script src="extensions.js"></script>
-        <script src="banner.js"></script>
-        <script src="app.js"></script>
-        <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./service-worker.js')
-                        .then((reg) => console.log('SW registered:', reg))
-                        .catch((err) => console.log('SW failed:', err));
-                });
-            }
-        </script>
+    <script src="assets.js"></script>
+    <script src="extensions.js"></script>
+    <script src="banner.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then((reg) => console.log('SW registered:', reg))
+                    .catch((err) => console.log('SW failed:', err));
+            });
+        }
+    </script>
 </body>
 
 </html>
