@@ -62,6 +62,9 @@ function init() {
     // Prevent double-tap zoom specifically on touchstart
     let lastTouchStart = 0;
     document.addEventListener('touchstart', function (e) {
+        // ALLOW drawing (don't block rapid strokes on canvas)
+        if (e.target.id === 'drawing-layer') return;
+
         if (e.touches.length > 1) {
             e.preventDefault(); // Block multi-touch pinch
         }
@@ -677,3 +680,44 @@ function setupGallery() {
 
 // Start
 window.addEventListener('load', init);
+
+async function exportImage() {
+    console.log("Export triggered");
+    // alert("Saving image..."); // Debug feedback for user
+
+    // Create a temp canvas to merge layers
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tCtx = tempCanvas.getContext('2d');
+
+    // 1. Fill White Background (so it's not transparent)
+    tCtx.fillStyle = '#FFFFFF';
+    tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // 2. Draw Coloring
+    tCtx.drawImage(canvas, 0, 0);
+
+    // 3. Draw Line Art
+    // We need to ensure the image is loaded. It should be since it's visible.
+    const lineArt = document.getElementById('line-art-layer');
+
+    // Security check: if running locally without server, this might taint canvas if not careful,
+    // but since we are using local relative images it should be fine.
+    try {
+        tCtx.drawImage(lineArt, 0, 0, tempCanvas.width, tempCanvas.height);
+
+        // 4. Save
+        const dataURL = tempCanvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        const name = ASSETS[state.currentIndex].name.replace(/\s+/g, '_').toLowerCase();
+        link.download = `emma_art_${name}_${Date.now()}.png`;
+        link.href = dataURL;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (e) {
+        console.error("Export failed:", e);
+        alert("Could not save image. (Security Restriction?)\nTry taking a screenshot instead!");
+    }
+}

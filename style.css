@@ -231,6 +231,8 @@ canvas,
   height: 100%;
   object-fit: contain;
   touch-action: none;
+  pointer-events: auto !important;
+  /* Ensure drawing works */
 }
 
 #drawing-layer {
