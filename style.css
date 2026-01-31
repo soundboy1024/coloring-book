@@ -45,11 +45,17 @@ button,
 
 /* Fix Scrolling for Sidebar and Gallery */
 #sidebar,
+#sidebar *,
 #gallery-grid,
-.modal-content {
+#gallery-grid *,
+.modal-content,
+.modal-content * {
   touch-action: pan-y !important;
   overscroll-behavior-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  user-select: auto !important;
+  /* Allow selection? No, maybe just touch */
+  pointer-events: auto !important;
 }
 
 img {
