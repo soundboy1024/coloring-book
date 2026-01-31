@@ -251,7 +251,8 @@ canvas,
 #tool-fill,
 #tool-eraser,
 #tool-rainbow,
-#tool-text {
+#tool-text,
+#tool-gallery {
   color: #333;
   font-size: 24px;
 }
