@@ -19,6 +19,8 @@ let state = {
     currentIndex: 0,
     currentColor: PALETTE[0],
     currentTool: 'brush', // Default to brush for immediate fun
+    brushSize: 30,
+    textChar: 'A',
     isDirty: false,
     isReady: false
 };
@@ -80,7 +82,9 @@ function updateToolUI() {
     document.getElementById('tool-brush').classList.toggle('active', state.currentTool === 'brush');
     document.getElementById('tool-fill').classList.toggle('active', state.currentTool === 'fill');
     document.getElementById('tool-eraser').classList.toggle('active', state.currentTool === 'eraser');
+    document.getElementById('tool-eraser').classList.toggle('active', state.currentTool === 'eraser');
     document.getElementById('tool-rainbow').classList.toggle('active', state.currentTool === 'rainbow');
+    document.getElementById('tool-text').classList.toggle('active', state.currentTool === 'text');
 }
 
 function setupCanvas() {
@@ -210,6 +214,7 @@ const TOOL_BRUSH = 'brush';
 const TOOL_FILL = 'fill';
 const TOOL_ERASER = 'eraser';
 const TOOL_RAINBOW = 'rainbow';
+const TOOL_TEXT = 'text';
 
 function attachEventListeners() {
     // Navigation
@@ -223,7 +228,23 @@ function attachEventListeners() {
     document.getElementById('tool-fill').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_FILL); });
     document.getElementById('tool-eraser').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_ERASER); });
     document.getElementById('tool-rainbow').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_RAINBOW); });
+    document.getElementById('tool-text').addEventListener('pointerdown', (e) => { e.preventDefault(); setTool(TOOL_TEXT); });
     document.getElementById('finish-btn').addEventListener('pointerdown', (e) => { e.preventDefault(); fireConfetti(); });
+
+    // Settings
+    const charInput = document.getElementById('char-input');
+    const sizeSlider = document.getElementById('size-slider');
+
+    if (charInput) {
+        charInput.addEventListener('input', (e) => {
+            if (e.target.value) state.textChar = e.target.value.charAt(0);
+        });
+    }
+    if (sizeSlider) {
+        sizeSlider.addEventListener('input', (e) => {
+            state.brushSize = parseInt(e.target.value, 10);
+        });
+    }
 
     // Canvas Pointer Events
     canvas.addEventListener('pointerdown', handlePointerDown);
@@ -236,7 +257,9 @@ function setTool(tool) {
     document.getElementById('tool-brush').classList.toggle('active', tool === TOOL_BRUSH);
     document.getElementById('tool-fill').classList.toggle('active', tool === TOOL_FILL);
     document.getElementById('tool-eraser').classList.toggle('active', tool === TOOL_ERASER);
+    document.getElementById('tool-eraser').classList.toggle('active', tool === TOOL_ERASER);
     document.getElementById('tool-rainbow').classList.toggle('active', tool === TOOL_RAINBOW);
+    document.getElementById('tool-text').classList.toggle('active', tool === TOOL_TEXT);
 }
 
 // Drawing State
@@ -253,6 +276,11 @@ function handlePointerDown(e) {
     if (state.currentTool === TOOL_FILL) {
         floodFill(x, y, state.currentColor);
         saveCanvasState();
+    } else if (state.currentTool === TOOL_TEXT) {
+        isDrawing = true;
+        lastX = x;
+        lastY = y;
+        stampText(x, y);
     } else {
         isDrawing = true;
         lastX = x;
@@ -267,9 +295,21 @@ function handlePointerMove(e) {
     if (!e.isPrimary) return;
 
     const { x, y } = getCoords(e);
-    drawLine(lastX, lastY, x, y);
-    lastX = x;
-    lastY = y;
+
+    if (state.currentTool === TOOL_TEXT) {
+        const dist = Math.hypot(x - lastX, y - lastY);
+        // Only stamp if moved enough (based on brush size to avoid clumping)
+        const threshold = Math.max(state.brushSize * 0.6, 10);
+        if (dist > threshold) {
+            stampText(x, y);
+            lastX = x;
+            lastY = y;
+        }
+    } else {
+        drawLine(lastX, lastY, x, y);
+        lastX = x;
+        lastY = y;
+    }
 }
 
 function handlePointerUp(e) {
@@ -304,13 +344,27 @@ function drawLine(x1, y1, x2, y2) {
         ctx.strokeStyle = state.currentColor;
     }
 
-    ctx.lineWidth = 20; // Thick brush for kids
+    ctx.lineWidth = state.brushSize; // Use dynamic size
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.stroke();
     // No closePath here for continuous lines
+}
+
+function stampText(x, y) {
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `bold ${state.brushSize}px "Fredoka", sans-serif`;
+
+    // Rainbow logic for text
+    const hue = (Date.now() / 5) % 360;
+    ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+
+    ctx.fillText(state.textChar, x, y);
+    ctx.restore();
 }
 
 function drawCircle(x, y) {
@@ -323,7 +377,7 @@ function drawCircle(x, y) {
     }
 
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI * 2);
+    ctx.arc(x, y, state.brushSize / 2, 0, Math.PI * 2);
     ctx.fill();
     // Reset comp op for safety, though drawLine handles it too
     ctx.globalCompositeOperation = 'source-over';
