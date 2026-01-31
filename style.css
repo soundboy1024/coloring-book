@@ -132,8 +132,12 @@ img {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Momentum scroll */
   align-items: center;
   padding: 15px 5px;
+  padding-bottom: 100px;
+  /* Safe space for last colors */
   gap: 15px;
   z-index: 20;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
