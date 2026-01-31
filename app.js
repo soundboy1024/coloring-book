@@ -422,6 +422,7 @@ function floodFill(startX, startY, hexColor) {
         imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     } catch (e) {
         console.error("Flood Fill Error (likely CORS/Tainted Canvas):", e);
+        alert("⚠️ Security Restriction\n\nSmart Fill doesn't work when running directly from a file due to browser security.\n\nPlease install as an App (Add to Home Screen) or use a local server.");
         return;
     }
     const pixelData = imageData.data;
