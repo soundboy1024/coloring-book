@@ -122,11 +122,35 @@ function updateToolUI() {
 }
 
 function setupCanvas() {
-    // Set canvas size to match the container's aspect ratio or fixed size
-    // For simplicity, we'll match the SVG viewbox 500x500 but scale it up
+    // Internal resolution
     canvas.width = 1000;
     canvas.height = 1000;
-    // CSS handles the display size
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+}
+
+function resizeCanvas() {
+    const wrapper = document.getElementById('canvas-wrapper');
+    if (!wrapper) return;
+
+    // Calculate available space
+    const w = wrapper.clientWidth;
+    const h = wrapper.clientHeight;
+
+    // We want a square canvas 1:1
+    // Fit it into the available space (contain)
+    const size = Math.min(w, h) * 0.95; // 95% margin
+
+    // Apply visual size to CSS
+    // This ensures the element BoundingRect IS the visual size
+    canvas.style.width = `${size}px`;
+    canvas.style.height = `${size}px`;
+
+    const lineArt = document.getElementById('line-art-layer');
+    if (lineArt) {
+        lineArt.style.width = `${size}px`;
+        lineArt.style.height = `${size}px`;
+    }
 }
 
 function renderPage() {
