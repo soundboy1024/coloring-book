@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v28-math-coords';
+const CACHE_NAME = 'coloring-book-v29-fix-sidebar-z';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

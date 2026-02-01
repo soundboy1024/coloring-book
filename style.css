@@ -174,7 +174,8 @@ img {
   padding-bottom: 100px;
   /* Safe space for last colors */
   gap: 15px;
-  z-index: 20;
+  z-index: 200;
+  /* Force above Header (30) and Confetti (100) */
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
