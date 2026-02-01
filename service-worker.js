@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v24-fix-drawing';
+const CACHE_NAME = 'coloring-book-v25-debug-mode';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

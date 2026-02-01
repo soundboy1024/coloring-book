@@ -62,14 +62,18 @@ function init() {
     // Prevent double-tap zoom specifically on touchstart
     let lastTouchStart = 0;
     document.addEventListener('touchstart', function (e) {
+        console.log("Touch:", e.target.id || e.target.tagName); // Debug Log
+
         // ALLOW drawing (don't block rapid strokes on canvas)
         if (e.target.id === 'drawing-layer') return;
 
         if (e.touches.length > 1) {
+            console.log("Block Multi-touch");
             e.preventDefault(); // Block multi-touch pinch
         }
         const now = (new Date()).getTime();
         if (now - lastTouchStart <= 300) {
+            console.log("Block Double-tap");
             e.preventDefault(); // Block double-tap
         }
         lastTouchStart = now;
