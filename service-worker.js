@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v25-debug-mode';
+const CACHE_NAME = 'coloring-book-v26-fix-pointer-events';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

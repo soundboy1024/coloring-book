@@ -270,7 +270,7 @@ function attachEventListeners() {
     document.getElementById('tool-gallery').addEventListener('pointerdown', (e) => { e.preventDefault(); openGallery(); });
     document.getElementById('close-gallery').addEventListener('pointerdown', (e) => { e.preventDefault(); closeGallery(); });
     document.getElementById('finish-btn').addEventListener('click', () => {
-        triggerConfetti();
+        fireConfetti();
     });
 
     document.getElementById('export-btn').addEventListener('pointerdown', (e) => {
