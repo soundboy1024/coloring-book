@@ -125,32 +125,7 @@ function setupCanvas() {
     // Internal resolution
     canvas.width = 1000;
     canvas.height = 1000;
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-}
-
-function resizeCanvas() {
-    const wrapper = document.getElementById('canvas-wrapper');
-    if (!wrapper) return;
-
-    // Calculate available space
-    const w = wrapper.clientWidth;
-    const h = wrapper.clientHeight;
-
-    // We want a square canvas 1:1
-    // Fit it into the available space (contain)
-    const size = Math.min(w, h) * 0.95; // 95% margin
-
-    // Apply visual size to CSS
-    // This ensures the element BoundingRect IS the visual size
-    canvas.style.width = `${size}px`;
-    canvas.style.height = `${size}px`;
-
-    const lineArt = document.getElementById('line-art-layer');
-    if (lineArt) {
-        lineArt.style.width = `${size}px`;
-        lineArt.style.height = `${size}px`;
-    }
+    // CSS handles the display size via object-fit
 }
 
 function renderPage() {
@@ -398,11 +373,45 @@ function handlePointerUp(e) {
 
 function getCoords(e) {
     const rect = canvas.getBoundingClientRect();
+
+    // 1. Calculate the actual displayed size of the image within the element
+    // (Simulating object-fit: contain logic)
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
+
+    // The canvas element might be 800x600, but displaying a 1000x1000 image.
+    // So the image is effectively 600x600, centered.
+
+    const internalAspect = canvas.width / canvas.height;
+    const clientAspect = rect.width / rect.height;
+
+    let renderW, renderH, offsetX, offsetY;
+
+    if (clientAspect > internalAspect) {
+        // Element is wider than image (Pillarbox: Black bars on sides)
+        renderH = rect.height;
+        renderW = renderH * internalAspect;
+        offsetY = 0;
+        offsetX = (rect.width - renderW) / 2;
+    } else {
+        // Element is taller than image (Letterbox: Black bars on top/bottom)
+        renderW = rect.width;
+        renderH = renderW / internalAspect;
+        offsetX = 0;
+        offsetY = (rect.height - renderH) / 2;
+    }
+
+    // 2. Map the Client X/Y to the Rendered Area
+    const clientX = e.clientX - rect.left;
+    const clientY = e.clientY - rect.top;
+
+    // 3. Convert to Internal Coordinates
+    const x = (clientX - offsetX) * (canvas.width / renderW);
+    const y = (clientY - offsetY) * (canvas.height / renderH);
+
     return {
-        x: Math.floor((e.clientX - rect.left) * scaleX),
-        y: Math.floor((e.clientY - rect.top) * scaleY)
+        x: Math.floor(x),
+        y: Math.floor(y)
     };
 }
 
