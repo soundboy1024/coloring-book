@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coloring-book-v29-fix-sidebar-z';
+const CACHE_NAME = 'coloring-book-v30-restore-stability';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

@@ -64,17 +64,29 @@ function init() {
     document.addEventListener('touchstart', function (e) {
         console.log("Touch:", e.target.id || e.target.tagName); // Debug Log
 
-        // ALLOW drawing (don't block rapid strokes on canvas)
+        // 1. ALWAYS ALLOW touches on UI controls (buttons, inputs, sidebar)
+        if (e.target.closest('#sidebar') ||
+            e.target.closest('.control-btn') ||
+            e.target.closest('.nav-btn') ||
+            e.target.closest('button') ||
+            e.target.closest('input')) {
+            return; // Let the browser handle it (scrolling, clicking)
+        }
+
+        // 2. ALLOW drawing (don't block rapid strokes on canvas)
         if (e.target.id === 'drawing-layer') return;
 
+        // 3. Block Pinch/Zoom on the background only
         if (e.touches.length > 1) {
             console.log("Block Multi-touch");
-            e.preventDefault(); // Block multi-touch pinch
+            e.preventDefault();
         }
+
+        // 4. Block Double-tap Zoom on background
         const now = (new Date()).getTime();
         if (now - lastTouchStart <= 300) {
             console.log("Block Double-tap");
-            e.preventDefault(); // Block double-tap
+            e.preventDefault();
         }
         lastTouchStart = now;
     }, { passive: false });
@@ -272,10 +284,8 @@ function attachEventListeners() {
         fireConfetti();
     });
 
-    document.getElementById('export-btn').addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        exportImage();
-    });
+    // Use click for standard buttons now that touch blocking is fixed
+    document.getElementById('export-btn').addEventListener('click', exportImage);
 
     document.getElementById('clear-btn').addEventListener('click', () => {
         if (confirm('Clear your drawing?')) {
